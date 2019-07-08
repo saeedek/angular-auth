@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
+import * as jwtDecode from "jwt-decode";
+
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json'
@@ -35,7 +37,17 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    
-    return false;
+    let token = localStorage.getItem('token');
+    if (!token)
+      return false;
+
+    let decoded = jwtDecode(token);
+    if (!decoded.exp) {
+      return true;
+    }
+    var current_time = Date.now().valueOf() / 1000;
+    if (decoded.exp < current_time) {
+      return false;
+    }
   }
 }
