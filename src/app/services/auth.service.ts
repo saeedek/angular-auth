@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
 import * as jwtDecode from "jwt-decode";
+import { JwtHelperService } from "@auth0/angular-jwt";
+const helper = new JwtHelperService();
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -40,14 +42,18 @@ export class AuthService {
     let token = localStorage.getItem('token');
     if (!token)
       return false;
+    const decodedToken = helper.decodeToken(token);
+    const expirationDate = helper.getTokenExpirationDate(token);
+    const isExpired = helper.isTokenExpired(token);
+    console.log(decodedToken,expirationDate,isExpired)
+    return !isExpired;
+  }
+  get currentUser() {
+    let token = localStorage.getItem("token");
+    if (!token)
+      return null;
 
-    let decoded = jwtDecode(token);
-    if (!decoded.exp) {
-      return true;
-    }
-    var current_time = Date.now().valueOf() / 1000;
-    if (decoded.exp < current_time) {
-      return false;
-    }
+    const decodedToken = helper.decodeToken(token);
+    return decodedToken;
   }
 }
