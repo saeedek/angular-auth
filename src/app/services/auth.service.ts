@@ -53,6 +53,7 @@ export class AuthService {
       return null;
 
     const decodedToken = helper.decodeToken(token);
+    console.log(decodedToken);
     return decodedToken;
   }
 }
