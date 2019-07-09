@@ -12,6 +12,7 @@ import { SignupComponent } from './signup/signup.component';
 import { FormsModule } from '@angular/forms';
 import { OrderService } from 'src/app/services/order.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { AuthGaurd } from './services/auth-gaurd.service';
 
 
 @NgModule({
@@ -30,7 +31,9 @@ import { AuthService } from 'src/app/services/auth.service';
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
-      { path: 'admin', component: AdminComponent },
+      { path: 'admin', component: AdminComponent,canActivate: [
+        AuthGaurd
+      ] },
       { path: 'login', component: LoginComponent },
       { path: 'logout', component: HomeComponent },
       { path: 'no-access', component: NoAccessComponent }
@@ -39,7 +42,8 @@ import { AuthService } from 'src/app/services/auth.service';
   ],
   providers: [
     OrderService,
-    AuthService
+    AuthService,
+    AuthGaurd
   ],
   bootstrap: [AppComponent]
 })
