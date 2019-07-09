@@ -45,8 +45,7 @@ export class AuthService {
     const decodedToken = helper.decodeToken(token);
     const expirationDate = helper.getTokenExpirationDate(token);
     const isExpired = helper.isTokenExpired(token);
-    console.log(decodedToken,expirationDate,isExpired)
-    return !isExpired;
+    return true; //until the expiration time is implemented on the server side
   }
   get currentUser() {
     let token = localStorage.getItem("token");
